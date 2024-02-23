@@ -196,6 +196,13 @@ function-declaration: DEFINE IDENT AS LEFTPAREN function-parameters RIGHTPAREN A
 	
 	struct CodeNode* node = new CodeNode;
 	struct CodeNode* statements = $10
+
+	std::String varName = $2;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code = std::string("func ") + std::string($2) + std::string("\n");
 	node->code += statements->code;
 	node->code+= std::string("endfunc\n\n");
@@ -214,10 +221,24 @@ function-parameters:  function-parameters-sequence	{
 
 function-parameters-sequence: type IDENT COMMA function-parameters	{
 			struct CodeNode* node = new CodeNode;
+
+			std::String varName = $2;
+
+			if(!find(varName)) {
+				yyerror("Undeclared variable.\n");
+			}
+
 			$$ = node;
 		}
  		| type IDENT	{
 			struct CodeNode* node = new CodeNode;
+
+			std::String varName = $1;
+
+			if(!find(varName)) {
+				yyerror("Undeclared variable.\n");
+			}
+
   			$$ = node;
   		};
 
@@ -255,6 +276,13 @@ variable-declaration: type variable-sequence SEMICOLON {$$ = $2}
 					
 | type IDENT ASSIGN expression SEMICOLON {
 	struct CodeNode* node = new CodeNode;
+
+	std::String varName = $2;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code = std::string(". ") + std::string($2) + std::string("\n");
 	node->code += std::string("= ") + std::string($2) + std::string($4) +  std::string("\n");
 
@@ -263,6 +291,13 @@ variable-declaration: type variable-sequence SEMICOLON {$$ = $2}
 
 | type LEFTBRACKET NUM RIGHTBRACKET IDENT SEMICOLON	{
 	struct CodeNode* node = new CodeNode;
+
+	std::String varName = $5;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code = std::string(".[] ") + std::string($5) + std::string(", ") + std::string($3) +  std::string("\n");
 
 	$$=node;
@@ -278,6 +313,13 @@ IDENT COMMA variable-sequence {
 	
 	//assign new node
 	struct CodeNode* node = new CodeNode;
+
+	std::String varName = $1;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code = std::string($1) + std::string("\n") + std::string($3) +  std::string("\n");
 	$$ = node;
 }
@@ -290,6 +332,13 @@ variable-assignment:
 IDENT ASSIGN expression SEMICOLON {
 	//assign new node
 	struct CodeNode* node = new CodeNode;
+	
+	std::String varName = $1;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code = std::string("= ") + std::string($1) + std::string($3) +  std::string("\n");
 
 	$$ = node;
@@ -297,6 +346,13 @@ IDENT ASSIGN expression SEMICOLON {
 |IDENT LEFTBRACKET expression RIGHTBRACKET ASSIGN expression SEMICOLON	{
 	//assign new node
 	struct CodeNode* node = new CodeNode;
+
+	std::String varName = $1;
+
+	if(!find(varName)) {
+		yyerror("Undeclared variable.\n");
+	}
+
 	node->code += std::string("[]= ") + std::string($1) + std::string($6) +  std::string("\n");
 
 	$$ = node;
