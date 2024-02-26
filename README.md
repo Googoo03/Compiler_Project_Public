@@ -1,7 +1,7 @@
 # CS152_Project
 A custom compiler developed in CS 152 using the All Guy Names programming language.
 
-Authors: Nicolas Karalis, Garrett Greenup, Alessandro Bombarda.
+Authors: Nicholas Karalis, Garrett Greenup, Alessandro Bombarda.
 
 ### Language Features
 
