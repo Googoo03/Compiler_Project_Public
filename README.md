@@ -1,9 +1,83 @@
 # CS152_Project
-A custom compiler developed in CS 152 using the All Guy Names programming language.
+A custom compiler developed in CS 152 by Nicholas Karalis, Garrett Greenup, and Alessandro Bombarda.
 
-Authors: Nicholas Karalis, Garrett Greenup, Alessandro Bombarda.
+## Description
+This compiler is a basic demonstration of our skills with parsing, syntactic analysis, and intermediate code generation using the Yacc and Bison compiler libraries. The language supported the various operators listed below as well as many logical features found in mainstream programming languages.
+
+### Example Program
+Below is one of our example files, Logic.agn, that demonstrates basic programming logic at play. Additionally, any and all files with our programming language have the extension .agn.
+```
+// Example program demonstrating if-else statements
+
+define main as() -> {
+    int x;
+    int y;
+    int z;
+
+    
+    x = 10;
+    y = 5;
+    if x or y {
+        z = 0;
+    } else {
+        z = 1;
+    }
+
+    // Should print out '0'.
+    write(z);
+
+    if x and z {
+		write(x and z); 
+	}
+	else {
+		write(x);
+	}
+	// Should print out '10' (x)
+
+    write(z and y); // Should print out '0'
+}
+```
+
+This program outputs the following intermediate code after being parsed and ran through our lexer.
+
+```
+func main
+. x
+. y
+. z
+= x, 10
+= y, 5
+. _tmp_1
+|| _tmp_1, x, y
+?:= start_if_1, _tmp_1
+:= start_else_1
+: start_if_1
+= z, 0
+:= end_else_2
+: start_else_1
+= z, 1
+: end_else_2
+.> z
+. _tmp_2
+&& _tmp_2, x, z
+?:= start_if_2, _tmp_2
+:= start_else_3
+: start_if_2
+. _tmp_3
+&& _tmp_3, x, z
+.> _tmp_3
+:= end_else_4
+: start_else_3
+.> x
+: end_else_4
+. _tmp_4
+&& _tmp_4, z, y
+.> _tmp_4
+endfunc
+```
 
 ### Language Features
+Below is a list of operators and commands that our language supports. Additional examples of these can be found in our [Examples](Examples) folder.
 
 | Language Feature      | Code Example |
 |-----------------------|--------------|
